@@ -9,16 +9,27 @@ import boto3
 import decimal
 import json
 
-from src import decimalencoder
+import decimalencoder
 
 class App():
     def __init__(self):
         """docstring for __init__"""
         # TODO: write code...
-        self.dynamodb = boto3.resource('dynamodb')
+        if os.getenv('TESTING') is True:
+            self.dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000')
+        else:
+            self.dynamodb = boto3.resource('dynamodb')
         
-        
+    def ping(self, event, context):
+        response = {
+            "statusCode": 200,
+            "body": json.dumps('pang')
+        }
+    
+        return response
+
     def create(self, event, context):
+        print('You have accessed the __create__ endpoint!')
         data = json.loads(event['body'])
         if 'text' not in data:
             logging.error("Validation Failed")
@@ -48,6 +59,7 @@ class App():
         return response
     
     def delete(self, event, context):
+        print('You have accessed the __delete__ endpoint!')
         table = self.dynamodb.Table(os.environ['DYNAMODB_TABLE'])
     
         # delete the todo from the database
@@ -56,10 +68,12 @@ class App():
                 'id': event['pathParameters']['id']
             }
         )
-    
+        deleted = f"Deleted ID: {event['pathParameters']['id']}"        
+        
         # create a response
         response = {
-            "statusCode": 200
+            "statusCode": 200,
+            "body": json.dumps(deleted)
         }
     
         return response
@@ -83,7 +97,7 @@ class App():
 
         return response
     
-    def list(self, event, context):
+    def show(self, event, context):
         table = self.dynamodb.Table(os.environ['DYNAMODB_TABLE'])
     
         # fetch all todos from the database
