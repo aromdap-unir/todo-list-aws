@@ -15,8 +15,10 @@ class App():
     def __init__(self):
         """docstring for __init__"""
         # TODO: write code...
-        if os.getenv('TESTING') is True:
-            self.dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000')
+        if os.getenv('STAGE') == 'test':
+            print('Testing path chosen!')
+            self.dynamodb = boto3.resource('dynamodb', 
+                                            endpoint_url='http://127.0.0.1:8000')
         else:
             self.dynamodb = boto3.resource('dynamodb')
         

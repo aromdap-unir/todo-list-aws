@@ -13,6 +13,7 @@ Globals:
     Environment:
       Variables:
         DYNAMODB_TABLE: !Ref TodoTable
+        STAGE: test
 
 Resources:
   TodoTable:

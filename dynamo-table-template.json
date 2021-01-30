@@ -1,27 +1,20 @@
 {
-    "AttributeDefinitions": [
-    {
-        "AttributeName": "Id", 
-        "AttributeType": "S"
-    },
-    {
-    "KeySchema": [
-    {
-        "KeyType": "HASH", 
-        "AttributeName": "Id"
-    }
-            ]
+    "AttributeDefinitions": [ 
+       { 
+          "AttributeName": "Id",
+          "AttributeType": "S"
+       }
+    ],
+
+    "KeySchema": [ 
+        { 
+           "AttributeName": "Id",
+           "KeyType": "HASH"
         }
-    ], 
-        "ProvisionedThroughput": {
-            "WriteCapacityUnits": 1, 
-            "ReadCapacityUnits": 1
-        }, 
-        "TableName": "dummy-table", 
-        "KeySchema": [
-        {
-            "KeyType": "HASH", 
-            "AttributeName": "Id"
-        }
-    ]
+     ],
+     "ProvisionedThroughput": { 
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+     },
+     "TableName": "dummy-table"
 }
