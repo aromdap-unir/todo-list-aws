@@ -16,13 +16,14 @@ class App():
         """docstring for __init__"""
         # TODO: write code...
         if os.getenv('STAGE') == 'test':
-            print('Testing path chosen!')
-            self.dynamodb = boto3.resource('dynamodb', 
-                                            endpoint_url='http://127.0.0.1:8000')
+            print(os.environ)
+            #self.dynamodb = boto3.resource('dynamodb', 
+            #                                endpoint_url='http://dynamodb_endpoint:8000')
+            #print('DynamoDB Localhost instance created')
         else:
             self.dynamodb = boto3.resource('dynamodb')
         
-    def ping(self, event, context):
+    def try_me(self, event, context):
         response = {
             "statusCode": 200,
             "body": json.dumps('pang')
@@ -101,10 +102,11 @@ class App():
     
     def show(self, event, context):
         table = self.dynamodb.Table(os.environ['DYNAMODB_TABLE'])
-    
+
         # fetch all todos from the database
+        print('Show >> Before Scan')
         result = table.scan()
-    
+        print('Show >> After Scan')
         # create a response
         response = {
             "statusCode": 200,

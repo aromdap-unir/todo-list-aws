@@ -1,10 +1,15 @@
 import json
+import os
 from todolist import App
 # from dummy_todolist import App
 # import requests
 
 
 def handler(event, context):
+    from pythonping import ping
+
+    ping('dynamodb_endpoint', verbose=True)
+    # raise Exception('eerrorrr')
     app = App()
     print(event)
     path = event['path'].split('/')[1]
@@ -14,7 +19,8 @@ def handler(event, context):
         'get': app.get,
         'show': app.show,
         'translate': app.translate,
-        'update': app.update
+        'update': app.update,
+        'try_me': app.try_me
     }
     if path in endpoints:
         return endpoints[path](event,context)
