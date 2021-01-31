@@ -11,15 +11,17 @@ import decimalencoder
 
 class App():
     def __init__(self):
-        print(os.environ)
         if os.getenv('STAGE') == 'test':
-            print('>> DynamoDB: Starting creation of testing instance')
-            self.dynamodb = boto3.resource('dynamodb', 
+            print(os.environ)
+            self.dynamodb = boto3.resource('dynamodb',
                                             endpoint_url='http://dynamodb:8000')
+            print('DynamoDB Localhost instance created')
         else:
-            print('>> DynamoDB: Starting creation of production instance')
             self.dynamodb = boto3.resource('dynamodb')
+        
+        self.table = self.dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
 
+        
         #self.table = self._create_table(os.getenv('STAGE'))
         
     def _create_table(self, tablename_):
@@ -124,9 +126,7 @@ class App():
     
     def show(self, event, context):
         logging.info('You have accessed the __show__ endpoint!') 
-        table = self.dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
-
-        result = table.scan()
+        result = self.table.scan()
         response = {
             "statusCode": 200,
             "body": json.dumps(result['Items'], cls=decimalencoder.DecimalEncoder)
