@@ -12,19 +12,28 @@ import decimalencoder
 class App():
     def __init__(self):
         if os.getenv('STAGE') == 'test':
-            print(os.environ)
             self.dynamodb = boto3.resource('dynamodb',
                                             endpoint_url='http://dynamodb:8000')
-            print('DynamoDB Localhost instance created')
         else:
             self.dynamodb = boto3.resource('dynamodb')
         
         self.table = self.dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
-
-        
-        #self.table = self._create_table(os.getenv('STAGE'))
+        #self.table = self._create_table(os.getenv('DYNAMODB_TABLE'))
         
     def _create_table(self, tablename_):
+        print(f'>> Check if table "{tablename_}" already exists')
+        # Instantiate your dynamo client object
+        client = boto3.client('dynamodb')
+
+        # Get an array of table names associated with the current account and endpoint.
+        response = client.list_tables()
+
+        
+        if tablename_ in existing_tables['TableNames']:
+            print(f'>> Confirmation: Table "{tablename_}" already exists')
+            return self.dynamodb.Table(tablename_)
+
+        print(f'>> Creating table: {tablename_}')
         table = self.dynamodb.create_table(
             AttributeDefinitions=[
                 {
@@ -44,13 +53,13 @@ class App():
                 'WriteCapacityUnits': 1
             }
         )
-
+      
         # Wait until the table exists.
-        table.meta.client.get_waiter('table_exists').wait(TableName='todoTable')
+        table.meta.client.get_waiter('table_exists').wait(TableName=tablename_)
         if (table.table_status != 'ACTIVE'):
             raise AssertionError()
 
-        return self.dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
+        return self.dynamodb.Table(tablename_)
 
     def try_me(self, event, context):
         response = {
@@ -61,7 +70,7 @@ class App():
         return response
 
     def create(self, event, context):
-        logging.info('You have accessed the __create__ endpoint!')
+        print('>> You have accessed the __create__ endpoint!')
         data = json.loads(event['body'])
         if 'text' not in data:
             logging.error("Validation Failed")
@@ -89,7 +98,7 @@ class App():
         return response
     
     def delete(self, event, context):
-        logging.info('You have accessed the __delete__ endpoint!')   
+        print('>> You have accessed the __delete__ endpoint!')   
         # delete the todo from the database
         self.table.delete_item(
             Key={
@@ -107,7 +116,7 @@ class App():
         return response
         
     def get(self, event, context):
-        logging.info('You have accessed the __get__ endpoint!') 
+        print('>> You have accessed the __get__ endpoint!') 
         # fetch todo from the database
         result = self.table.get_item(
             Key={
@@ -125,7 +134,7 @@ class App():
         return response
     
     def show(self, event, context):
-        logging.info('You have accessed the __show__ endpoint!') 
+        print('>> You have accessed the __show__ endpoint!') 
         result = self.table.scan()
         response = {
             "statusCode": 200,
@@ -135,7 +144,7 @@ class App():
         return response
         
     def translate(self, event, context):
-        logging.info('You have accessed the __translate__ endpoint!') 
+        print('>> You have accessed the __translate__ endpoint!') 
         # fetch todo from the database
         result = self.table.get_item(
             Key={
@@ -177,7 +186,7 @@ class App():
             raise Exception("[ErrorMessage]: " + str(e))
             
     def update(self, event, context):
-        logging.info('You have accessed the __update__ endpoint!') 
+        print('>> You have accessed the __update__ endpoint!') 
         data = json.loads(event['body'])
         if 'text' not in data or 'checked' not in data:
             logging.error("Validation Failed")
@@ -210,5 +219,5 @@ class App():
             "body": json.dumps(result['Attributes'],
                                cls=decimalencoder.DecimalEncoder)
         }
-    
+
         return response

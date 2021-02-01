@@ -1,11 +1,11 @@
 import json
 import os
 from todolist import App
-# from dummy_todolist import App
 
 def handler(event, context):
+    print('>> Lambda Handler: accessed')
     app = App()
-    print(event)
+    print('>> Application Instance: created')
     path = event['path'].split('/')[1]
     endpoints = {
         'create': app.create,
