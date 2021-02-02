@@ -10,16 +10,20 @@ Globals:
     Runtime: python3.8
     CodeUri: src/
     Timeout: 5
-    Environment:
-      Variables:
-        DYNAMODB_TABLE: dummy-table #!Ref TodoTable
-        STAGE: test
+
+
+Parameters:
+  DynamoDbTable:
+    Type: String
+  Stage:
+    Type: String
+
 
 Resources:
   TodoTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: dummy-table #!Sub "${DynamoTable}_${Enviroment}"
+      TableName: !Ref DynamoDbTable #!Sub "${DynamoTable}_${Enviroment}"
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
