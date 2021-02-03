@@ -11,9 +11,9 @@ pipeline {
             steps{
                 // Setup Virtualenv for testing
                 echo 'SetUp >> Creating Python Virtual Environment'
-                sh "pip3 install virtualenv"
-                sh "virtualenv -p /usr/bin/python3.7 venv"
-                sh "source venv/bin/activate"
+                sh "python3 -m venv env"
+                sh "source env/bin/activate"
+                sh "which python"
             }
         }
     }       
