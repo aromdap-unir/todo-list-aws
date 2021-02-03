@@ -31,6 +31,7 @@ pipeline {
                 // Setup Virtualenv for testing
                 echo 'GoodPractices >> Static analysis of code'
                 sh '''
+                    source env/bin/activate
                     radon cc src/
                     flake8 src/
                 '''
