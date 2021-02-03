@@ -11,12 +11,16 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Get some code from a CodeCommit repository
-                sh "git clone https://${env.CODECOMMIT_USER}:${env.CODECOMMIT_PASSWORD}@git-codecommit.us-east-1.amazonaws.com/v1/repos/todo-list-serverless"
+                sh "git clone https://${env.CODECOMMIT_USER}:${env.CODECOMMIT_PASSWORD}@git-codecommit.us-east-1.amazonaws.com/v1/repos/todo-list-aws"
             }
         }
         stage('SetUp'){
             steps{
                 // Setup Virtualenv for testing
+                sh "pip3 install virtualenv"
+                sh "virtualenv -p /usr/bin/python3.7 venv"
+                sh "source venv/bin/activate"
+
             }
         }
         stage('Test'){

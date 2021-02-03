@@ -3,9 +3,12 @@ import os
 from todolist import App
 
 def handler(event, context):
-    print('>> Lambda Handler: accessed')
+    '''
+    1. Get instance of the app class
+    2. Generate enpoint looking at matches between path and the app method name
+    3. Access the requested method dynamically passing the event as a parameter
+    '''
     app = App()
-    print('>> Application Instance: created')
     path = event['path'].split('/')[1]
     endpoints = {
         'create': app.create,
