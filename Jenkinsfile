@@ -22,7 +22,6 @@ pipeline {
                     python3 -m venv env
                     source env/bin/activate
                     which python3.7
-                    cd src && ls -lh
                     pip install -r requirements.txt
                 '''
             }
