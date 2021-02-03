@@ -3,9 +3,8 @@ pipeline {
     stages {
         stage('Clean'){    
             steps {
-                deleteDir()
                 echo 'Clean >> Environmental variables'
-                sh 'printenv'
+                deleteDir()
             }
         }
         stage('Checkout') {
@@ -20,12 +19,21 @@ pipeline {
                 // Setup Virtualenv for testing
                 echo 'SetUp >> Creating Python Virtual Environment'
                 sh '''
-                    python3 -m venv env"
-                    source env/bin/activate"
-                    which python3.7"
-                    cd src && ls -lh"
-                    pip install --upgrade pip
+                    python3 -m venv env
+                    source env/bin/activate
+                    which python3.7
+                    cd src && ls -lh
                     pip install -r requirements.txt
+                '''
+            }
+        }
+        stage('GoodPractices'){
+            steps{
+                // Setup Virtualenv for testing
+                echo 'GoodPractices >> Static analysis of code'
+                sh '''
+                    radon cc src/
+                    flake8 src/
                 '''
             }
         }
