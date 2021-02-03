@@ -22,7 +22,7 @@ pipeline {
                 sh "python3 -m venv env"
                 sh "source env/bin/activate"
                 sh "which python3.7"
-                sh "cd src"
+                sh "cd src && ls -lh"
                 sh "pip3 install -r requirements.txt"
             }
         }
