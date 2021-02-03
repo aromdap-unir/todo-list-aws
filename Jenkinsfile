@@ -13,7 +13,7 @@ pipeline {
                 echo 'SetUp >> Creating Python Virtual Environment'
                 sh "python3 -m venv env"
                 sh "source env/bin/activate"
-                sh "which python"
+                sh "which python3.7"
             }
         }
     }       
