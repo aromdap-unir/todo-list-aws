@@ -8,7 +8,6 @@ pipeline {
                 git branch: 'dev', credentialsId: '676655fc-c40f-4964-b3ba-c3dfb91b2094', url: 'https://git-codecommit.us-east-1.amazonaws.com/v1/repos/todo-list-aws'
                 sh '''
                     ls -lh
-                    printenv
                 '''
             }
         }
@@ -28,17 +27,22 @@ pipeline {
             steps{
                 echo '// Testing // Static analysis of code'
                 sh '''
-                    rm ./radon/*
-                    rm ./flake8/*
                     source env/bin/activate
                     
+                    rm ./radon/*
                     radon cc src/ --min ${RADON_MIN} --total-average -s --json --output-file ./radon/analysis.json
                     cat ./radon/analysis.json
                     grep -il 'rank' ./radon/* && echo 'Radon test: failed' || echo 'Radon test: passed!'
                     
+                    rm ./flake8/*
                     flake8 src/ --exit-zero --ignore ${FLAKE8_IGNORE} --statistics --show-source --format=pylint --output-file ./flake8/analysis.json
                     cat ./flake8/analysis.json
                     grep -il -E '[[:alnum:]]' ./flake8/* && echo 'Flake8 test: failed' || echo 'Flake8 test: passed!'
+                    
+                    rm ./bandit/*
+                    bandit src/* --exit-zero --format json --output ./bandit/analysis.json
+                    bandit src/* --exit-zero --format txt --output ./bandit/analysis.txt
+                    grep -il 'No issues identified' ./bandit/* && echo 'Bandit test: passed!' || echo 'Bandit test: failed!'
                     
                 '''
 
