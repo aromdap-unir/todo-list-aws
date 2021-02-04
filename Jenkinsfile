@@ -32,11 +32,11 @@ pipeline {
                     rm ./flake8/*
                     source env/bin/activate
                     
-                    radon cc src/ --min B --total-average -s --json --output-file ./radon/analysis.json
+                    radon cc src/ --min ${RADON_MIN} --total-average -s --json --output-file ./radon/analysis.json
                     cat ./radon/analysis.json
                     grep -il 'rank' ./radon/* && echo 'Radon test: failed' || echo 'Radon test: passed!'
                     
-                    flake8 src/ --exit-zero --ignore W --statistics --show-source --format=pylint --output-file ./flake8/analysis.json
+                    flake8 src/ --exit-zero --ignore ${FLAKE8_IGNORE} --statistics --show-source --format=pylint --output-file ./flake8/analysis.json
                     cat ./flake8/analysis.json
                     grep -il -E '[[:alnum:]]' ./flake8/* && echo 'Flake8 test: failed' || echo 'Flake8 test: passed!'
                     
