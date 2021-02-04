@@ -30,8 +30,8 @@ pipeline {
                     source env/bin/activate
                     radon cc src/ --min B --total-average -s --json --output-file ./radon/cc_analysis.json
                     grep -ril "rank" ./radon && error('Aborting the build: radon detected low quality >> REVIEW CODE')
-                    flake8 --statistics src/ --show-source --ignore=W293 --format=pylint --output-file ./flake8/analysis.json
-                    grep -ril "\[W" ./flake8 && error('Aborting the build: flake8 detected PEP8 errors >> REVIEW CODE')
+                    flake8 --statistics src/ --show-source --format=pylint --output-file ./flake8/analysis.json
+                    grep -ril * ./flake8 && error('Aborting the build: flake8 detected PEP8 errors >> REVIEW CODE')
                 '''
 
                 echo '// Testing // Security analysis of code'
