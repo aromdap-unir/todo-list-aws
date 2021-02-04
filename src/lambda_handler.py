@@ -1,6 +1,6 @@
 import json
-import os
 from todolist import App
+
 
 def handler(event, context):
     '''
@@ -20,7 +20,7 @@ def handler(event, context):
         'try_me': app.try_me
     }
     if path in endpoints:
-        return endpoints[path](event,context)
+        return endpoints[path](event, context)
     else:
         return {
             "statusCode": 404,
