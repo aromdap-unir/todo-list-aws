@@ -17,7 +17,7 @@ stack_name = "todolist-staging"
 s3_bucket = "es-unir-staging-s3-55790-artifacts"
 s3_prefix = "todolist-staging"
 region = "us-east-1"
-confirm_changeset = true
+confirm_changeset = false
 capabilities = "CAPABILITY_IAM"
 parameter_overrides = "DynamoDbTable=\"TodoListTableStaging\", Stage=\"staging\"" 
 
@@ -28,6 +28,6 @@ stack_name = "todolist-production"
 s3_bucket = "es-unir-production-s3-55790-artifacts"
 s3_prefix = "todolist-production"
 region = "us-east-1"
-confirm_changeset = true
+confirm_changeset = false
 capabilities = "CAPABILITY_IAM"
 parameter_overrides = "DynamoDbTable=\"TodoListTableProduction\", Stage=\"production\"" 
