@@ -19,7 +19,7 @@ pipeline {
                     python3 -m venv env
                     source env/bin/activate 
                     which python3.7
-                    pip install -r requirements.txt
+                    pip install -r ./src/requirements.txt
                 '''
             }
         }
@@ -45,7 +45,6 @@ pipeline {
                     grep -il 'No issues identified' ./bandit/* && echo 'Bandit test: passed!' || 'Bandit test: failed!'
                     
                 '''
-
             }
         }
         stage('Build'){
