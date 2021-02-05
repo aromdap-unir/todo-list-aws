@@ -1,92 +1,62 @@
 pipeline {
     agent any
     stages {
-        stage('Clean'){    
-            steps {
-                deleteDir()
-                sh 'printenv'
-            }
-        }
-
         stage('Checkout') {
             steps {
-                // Get some code from a CodeCommit repository
-                sh "git clone https://${env.CODECOMMIT_USER}:${env.CODECOMMIT_PASSWORD}@git-codecommit.us-east-1.amazonaws.com/v1/repos/todo-list-aws"
+                deleteDir()
+                echo '// Checkout // Get some code from a CodeCommit repository'
+                git branch: 'dev', credentialsId: '676655fc-c40f-4964-b3ba-c3dfb91b2094', url: 'https://git-codecommit.us-east-1.amazonaws.com/v1/repos/todo-list-aws'
+                sh '''
+                    ls -lh
+                '''
             }
         }
         stage('SetUp'){
             steps{
                 // Setup Virtualenv for testing
-                sh "pip3 install virtualenv"
-                sh "virtualenv -p /usr/bin/python3.7 venv"
-                sh "source venv/bin/activate"
+                echo '// SetUp // Creating Python Virtual Environment'
+                sh '''
+                    python3 -m venv env
+                    source env/bin/activate 
+                    which python3.7
+                    pip install -r requirements.txt
+                '''
+            }
+        }
+        stage('Testing'){
+            steps{
+                echo '// Testing // Static analysis of code'
+                sh '''
+                    source env/bin/activate
+                    
+                    rm ./radon/*
+                    radon cc src/ --min ${RADON_MIN} --total-average -s --json --output-file ./radon/analysis.json
+                    cat ./radon/analysis.json
+                    grep -il 'rank' ./radon/* && echo 'Radon test: failed' || echo 'Radon test: passed!'
+                    
+                    rm ./flake8/*
+                    flake8 src/ --exit-zero --ignore ${FLAKE8_IGNORE} --statistics --show-source --format=pylint --output-file ./flake8/analysis.json
+                    cat ./flake8/analysis.json
+                    grep -il -E '[[:alnum:]]' ./flake8/* && 'Flake8 test: failed' || echo 'Flake8 test: passed!'
+                    
+                    rm ./bandit/*
+                    bandit src/* --exit-zero --format json --output ./bandit/analysis.json
+                    bandit src/* --exit-zero --format txt --output ./bandit/analysis.txt
+                    grep -il 'No issues identified' ./bandit/* && echo 'Bandit test: passed!' || 'Bandit test: failed!'
+                    
+                '''
 
             }
         }
-        stage('Test'){
+        stage('Build'){
             steps{
-                dir("todo-list-aws/test") {
-                    // Static program analysis -> radon
-                    echo 'Make some cool static program analysis wich radon. IIs the code enought simple to understand?'
-                }
-            }
-            steps{
-                dir("todo-list-aws/test") {
-                    // Quality program analysis -> flake8
-                    echo 'echo My code has enought quality?'
-                }
-            }
-            steps{
-                dir("todo-list-aws/test") {
-                    // Security programa analysis -> bandit
-                    echo 'Make some security analysis of the code. Is the code secure?'
-                }
-            }
-            steps{
-                dir("todo-list-aws/test") {
-                    // Unitary testing -> unittest or pytest
-                    sh ''
-                    // Coverage report -> coverage
-                    echo 'Execute something like coverage run -m & coverage report -m'
-                }
-            }
-        }
-        stage('Build') {
-            steps {
-                dir("todo-list-aws") {
-                    // Build release
-                    echo 'Maybe something like sam build?'
-                    sh "sam build ..."
-                    // Package release and persist in s3 bucket
-                    sh "sam package --template-file template.yaml --output-template-file packaged.yaml --s3-bucket ${env.COUNTRY}-${env.TEAM}-${env.ENVIRONMENT}-${env.SERVICE}-${env.RAND_ID}-artifacts" 
-                }
-            }
-        }
-        stage('Integration Test on local') {
-            steps{
-                dir("todo-list-aws/test") {
-                    // Unittest or pytest                   
-                    // Integration test over local -> unittest or pytest against the lambda functions.
-                    echo 'test all methods works fine. Maybe with sam-local and aws dynamodb official docker image'
-                }   
+                sh 'sam build'
             }
         }
         stage('Deploy'){
             steps{
-                dir("todo-list-aws") {
-                    // Deploy architecture
-                    sh "yes | sam deploy --template-file packaged.yaml --stack-name ${env.STACK_NAME} --parameter-overrides Environment=${env.ENVIRONMENT}"
-                }   
+                sh 'sam deploy --config-env staging'
             }
         }
-        stage('Integration Test after deploy'){
-            steps{
-                dir("todo-list-aws") {
-                    // Unittest or pytest                   
-                    // Unitary testing -> unittest or pytest against the lambda functions.
-                    echo 'test all methods works fine'
-                }   
-            }
-        }
-    }
+    }       
 }
