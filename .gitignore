@@ -1,5 +1,4 @@
 env/
 *.aws*
 *dummy*
-*pipeline*
 *vscode*
