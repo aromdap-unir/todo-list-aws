@@ -17,7 +17,6 @@ def handler(event, context):
         'show': app.show,
         'translate': app.translate,
         'update': app.update,
-        'try_me': app.try_me
     }
     if path in endpoints:
         return endpoints[path](event, context)

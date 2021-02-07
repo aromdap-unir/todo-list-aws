@@ -17,7 +17,8 @@ Globals:
     Timeout: 5
     Environment:
       Variables:
-        DYNAMODB_TABLE: !Ref DynamoDbTable 
+        STAGE: !Ref Stage
+        DYNAMODB_TABLE: !Ref DynamoDbTable
 
 Resources:
   TodoTable:
@@ -52,11 +53,6 @@ Resources:
           Resource: "*"
       
       Events:
-        ping:
-            Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-            Properties:
-              Path: /try_me
-              Method: get
         create:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
