@@ -11,7 +11,7 @@ class App():
     def __init__(self):
         """
         [summary]
-        Constructor: Get resource dynamically based on local/cloud execution
+        Constructor: Assign DYNAMODB resource dynamically based on local/cloud execution
         """
         if os.getenv('STAGE') == 'local':
             self.dynamodb = boto3.resource('dynamodb',
