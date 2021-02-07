@@ -4,26 +4,26 @@ Description: >
   todo-list-aws
   DevOps SAM Serverless application
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
-Globals:
-  Function:
-    Runtime: python3.8
-    CodeUri: src/
-    Timeout: 5
-
-
 Parameters:
   DynamoDbTable:
     Type: String
   Stage:
     Type: String
 
+Globals:
+  Function:
+    Runtime: python3.8
+    CodeUri: src/
+    Timeout: 5
+    Environment:
+      Variables:
+        DYNAMODB_TABLE: !Ref DynamoDbTable 
 
 Resources:
   TodoTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Ref DynamoDbTable 
+      TableName: !Ref DYNAMODB_TABLE 
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
