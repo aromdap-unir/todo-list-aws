@@ -15,6 +15,7 @@ class App():
         else:
             self.dynamodb = boto3.resource('dynamodb')
 
+        print(f"Table name: {os.getenv('DynamoDbTable')}")
         self.table = self.dynamodb.Table(os.getenv('DynamoDbTable'))
 
     def create(self, event, context):
