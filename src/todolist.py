@@ -8,7 +8,11 @@ import decimalencoder
 
 
 class App():
-    def __init__(self, dynamodb=None):
+    def __init__(self):
+        """
+        [summary]
+        Constructor: Get resource dynamically based on local/cloud execution
+        """
         if os.getenv('STAGE') == 'local':
             self.dynamodb = boto3.resource('dynamodb',
                                            endpoint_url='http://dynamodb:8000')
@@ -18,6 +22,18 @@ class App():
         self.table = self.dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
 
     def create(self, event, context):
+        """[summary]
+        Endpoint that creates entry in DB table based on text passed in body
+        Args:
+            event ([json]): [AWS API Gateway event form]
+            context ([None]): [None]
+
+        Raises:
+            Exception: [Trigger when "text" parameter not in body]
+
+        Returns:
+            [json]: [Response]
+        """
         print('>> You have accessed the __create__ endpoint!')
         data = json.loads(event['body'])
         if 'text' not in data:
@@ -42,6 +58,17 @@ class App():
         return response
   
     def delete(self, event, context):
+        """[summary]
+        Endpoint that deletes and existing entry in DB table
+        based on the id passed in path parameter
+
+        Args:
+            event ([json]): [AWS API Gateway event form]
+            context ([None]): [None]
+
+        Returns:
+            [json]: [Response]
+        """
         print('>> You have accessed the __delete__ endpoint!')
         # delete the todo from the database
         self.table.delete_item(
@@ -58,6 +85,17 @@ class App():
         return response
         
     def get(self, event, context):
+        """[summary]
+        Endpoint that gets and existing entry in DB table
+        based on the id passed in path parameter
+
+        Args:
+            event ([json]): [AWS API Gateway event form]
+            context ([None]): [None]
+
+        Returns:
+            [json]: [Response]
+        """
         print('>> You have accessed the __get__ endpoint!')
         # fetch todo from the database
         result = self.table.get_item(
@@ -74,6 +112,16 @@ class App():
         return response
     
     def show(self, event, context):
+        """[summary]
+        Endpoint that lists all existing entries in DB table
+
+        Args:
+            event ([json]): [AWS API Gateway event form]
+            context ([None]): [None]
+
+        Returns:
+            [json]: [Response]
+        """
         print('>> You have accessed the __show__ endpoint!')
         result = self.table.scan()
         response = {
@@ -84,6 +132,21 @@ class App():
         return response
         
     def translate(self, event, context):
+        """
+        [summary]
+        Endpoint that translates any provided entry in DB table
+        to the language of your choice
+
+        Args:
+            event ([json]): [ID to get the DB entry and target language]
+            context ([None]): [None]
+
+        Raises:
+            Exception: [Any typing error during transaction to translate]
+
+        Returns:
+            [json]: [Response]
+        """
         print('>> You have accessed the __translate__ endpoint!')
         # fetch todo from the database
         result = self.table.get_item(
@@ -118,6 +181,19 @@ class App():
             raise Exception("[ErrorMessage]: " + str(e))
     
     def update(self, event, context):
+        """
+        [summary]
+
+        Args:
+            event ([json]): [AWS API Gateway event form]
+            context ([None]): [None]
+
+        Raises:
+            Exception: [Triggered when text or checked not supplied]
+
+        Returns:
+            [json]: [Response]
+        """
         print('>> You have accessed the __update__ endpoint!')
         data = json.loads(event['body'])
         if 'text' not in data or 'checked' not in data:

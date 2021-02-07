@@ -24,7 +24,7 @@ Resources:
   TodoTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Ref DYNAMODB_TABLE 
+      TableName: !Ref DynamoDbTable 
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
