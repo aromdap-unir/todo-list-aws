@@ -17,52 +17,6 @@ class App():
 
         self.table = self.dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
 
-    def _create_table(self, tablename_):
-        print(f'>> Check if table "{tablename_}" already exists')
-        # Instantiate your dynamo client object
-        client = boto3.client('dynamodb')
-
-        # Get an array of table names:
-        existing_tables = client.list_tables()
-
-        if tablename_ in existing_tables['TableNames']:
-            print(f'>> Confirmation: Table "{tablename_}" already exists')
-            return self.dynamodb.Table(tablename_)
-
-        print(f'>> Creating table: {tablename_}')
-        table = self.dynamodb.create_table(
-            AttributeDefinitions=[
-                {
-                    'AttributeName': 'id',
-                    'AttributeType': 'S'
-                }
-            ],
-            TableName=tablename_,
-            KeySchema=[
-                {
-                    'AttributeName': 'id',
-                    'KeyType': 'HASH'
-                }
-            ],
-            ProvisionedThroughput={
-                'ReadCapacityUnits': 1,
-                'WriteCapacityUnits': 1
-            }
-        )
-        # Wait until the table exists.
-        table.meta.client.get_waiter('table_exists').wait(TableName=tablename_)
-        if (table.table_status != 'ACTIVE'):
-            raise AssertionError()
-
-        return self.dynamodb.Table(tablename_)
-
-    def try_me(self, event, context):
-        response = {
-            "statusCode": 200,
-            "body": json.dumps('pang')
-        }
-        return response
-
     def create(self, event, context):
         print('>> You have accessed the __create__ endpoint!')
         data = json.loads(event['body'])

@@ -49,6 +49,10 @@ class TodoListTest(unittest.TestCase):
         event['body'] = '{"text":"Testing class with random message"}'
         self.response = App.create(self=self, event=event, context=None)
         self.assertEqual(self.response['statusCode'], 200)
+        event['body'] = '{"this will fail": "Testing class with random message"}'
+        with self.assertRaises(Exception):
+            self.response = App.create(self=self, event=event, context=None)
+
 
     def test_delete(self):
         self.test_create()
@@ -79,7 +83,16 @@ class TodoListTest(unittest.TestCase):
         event['body'] = '{"text":"Changing message", "checked":"True"}'
         response = App.update(self=self, event=event, context=None)
         self.assertEqual(response['statusCode'], 200)
-     
+
+        event['body'] = '{"text":"Changing message", "this will fail":"True"}'
+        with self.assertRaises(Exception):
+            self.response = App.update(self=self, event=event, context=None)
+        event['body'] = '{"this will fail":"Changing message", "checked":"True"}'
+        with self.assertRaises(Exception):
+            self.response = App.update(self=self, event=event, context=None)
+        event['body'] = '{"this will fail":"Changing message", "this will fail":"True"}'
+        with self.assertRaises(Exception):
+            self.response = App.update(self=self, event=event, context=None)
 
 if __name__ == '__main__':
     unittest.main()
