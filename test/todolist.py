@@ -15,7 +15,7 @@ class App():
         else:
             self.dynamodb = boto3.resource('dynamodb')
 
-        self.table = self.dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
+        self.table = self.dynamodb.Table(os.getenv('DynamoDbTable'))
 
     def create(self, event, context):
         print('>> You have accessed the __create__ endpoint!')
