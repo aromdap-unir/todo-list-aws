@@ -15,8 +15,8 @@ class App():
         else:
             self.dynamodb = boto3.resource('dynamodb')
 
-        print(f"Table name: {os.getenv('DynamoDbTable')}")
-        self.table = self.dynamodb.Table(os.getenv('DynamoDbTable'))
+        print(f"Table name: {os.getenv('DYNAMODB_TABLE')}")
+        self.table = self.dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
 
     def _create_table(self, tablename_):
         print(f'>> Check if table "{tablename_}" already exists')
