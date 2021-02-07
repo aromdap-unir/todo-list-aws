@@ -11,7 +11,7 @@ chardet==4.0.0
 coverage==5.4
 cryptography==3.3.1
 decorator==4.4.2
-docker==4.4.1
+docker==4.2.0
 ecdsa==0.14.1
 future==0.18.2
 idna==2.8
@@ -33,11 +33,11 @@ py-event-mocks==0.0.4
 pyasn1==0.4.8
 pycparser==2.20
 pyrsistent==0.17.3
-python-dateutil==2.8.1
+python-dateutil<2.8.1
 python-jose==3.2.0
 pytz==2021.1
 PyYAML==5.4.1
-requests==2.25.1
+requests==2.23.0
 responses==0.12.1
 rsa==4.7
 s3transfer==0.3.4
