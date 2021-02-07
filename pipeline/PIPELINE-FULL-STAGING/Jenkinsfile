@@ -13,12 +13,15 @@ pipeline {
         }
         stage('SetUp'){
             steps{
-                // Setup Virtualenv for testing
                 echo '// SetUp // Creating Python Virtual Environment'
                 sh '''
                     python3 -m venv env
                     source env/bin/activate 
                     which python3.7
+                    pip install -r requirements.txt -q
+
+                    python3 -m venv unitenv
+                    cd test
                     pip install -r requirements.txt -q
                 '''
             }
@@ -41,7 +44,12 @@ pipeline {
                     bandit src/* --exit-zero --format json --output ./bandit/analysis.json
                     bandit src/* --exit-zero --format txt --output ./bandit/analysis.txt
                     grep -il 'No issues identified' ./bandit/* && echo 'Bandit test: passed!' || { echo 'Bandit test: failed!'; exit 1 }
-                    
+                '''
+                echo '// Testing // Unittest of app'
+                sh '''
+                    source unitenv/bin/activate
+                    coverage run -m TestToDoClass
+                    coverage html --fail-under=80 todolist.py                     
                 '''
             }
         }
@@ -53,8 +61,8 @@ pipeline {
         stage('Deploy'){
             steps{
                 sh 'sam deploy --config-env staging'
-                sh 'git checkout -b main'
             }
         }
+
     }       
 }

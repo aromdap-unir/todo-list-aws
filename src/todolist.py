@@ -8,7 +8,7 @@ import decimalencoder
 
 
 class App():
-    def __init__(self):
+    def __init__(self, dynamodb=None):
         if os.getenv('STAGE') == 'test':
             self.dynamodb = boto3.resource('dynamodb',
                                            endpoint_url='http://dynamodb:8000')
