@@ -34,7 +34,7 @@ pipeline {
                     
                     rm ./radon/*
                     radon cc src/ --min ${RADON_MIN} --total-average -s --json --output-file ./radon/analysis.json
-                    grep -il 'rank' ./radon/* && { echo 'Radon test: failed'; exit 1 } || echo 'Radon test: passed!'
+                    grep -il 'rank' ./radon/* && 'Radon test: failed'
                     
                     rm ./flake8/*
                     flake8 src/ --exit-zero --ignore ${FLAKE8_IGNORE} --statistics --show-source --format=pylint --output-file ./flake8/analysis.json
