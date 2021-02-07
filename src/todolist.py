@@ -9,15 +9,12 @@ import decimalencoder
 
 class App():
     def __init__(self, dynamodb=None):
-        print(f"Environment variable Stage: {os.getenv('STAGE')}")
-        print(f"Environment variable Table name: {os.getenv('DYNAMODB_TABLEg')}")
         if os.getenv('STAGE') == 'local':
             self.dynamodb = boto3.resource('dynamodb',
                                            endpoint_url='http://dynamodb:8000')
         else:
             self.dynamodb = boto3.resource('dynamodb')
 
-        
         self.table = self.dynamodb.Table(os.getenv('DYNAMODB_TABLE'))
 
     def create(self, event, context):
