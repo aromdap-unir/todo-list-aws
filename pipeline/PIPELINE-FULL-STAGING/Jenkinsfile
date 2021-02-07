@@ -43,8 +43,9 @@ pipeline {
                 echo '// Testing // Unittest of app'
                 sh '''
                     source unitenv/bin/activate
-                    coverage run -m ./test/TestToDoClass
-                    coverage html --fail-under=80 ./test/todolist.py                     
+                    cd test
+                    coverage run -m TestToDoClass
+                    coverage html --fail-under=80 todolist.py                     
                 '''
             }
         }
