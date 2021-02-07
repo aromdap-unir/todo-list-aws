@@ -65,7 +65,7 @@ pipeline {
                 id_response=$(curl -X POST https://or92aavjea.execute-api.us-east-1.amazonaws.com/Prod/create --data '{"text":"This is a test"}' | python3 -c "import sys, json; print(json.load(sys.stdin)['id'])")
                 [ -z "$id_response" ] && 'Create method: Failed!' || id_path=&id_response 
                 
-                id_reponse=''
+                id_response=''
                 id_response=$(curl https://or92aavjea.execute-api.us-east-1.amazonaws.com/Prod/get/$id_path)
                 [ -z "$id_response" ] && 'Get method: Failed!' || id_path=&id_response 
                 
