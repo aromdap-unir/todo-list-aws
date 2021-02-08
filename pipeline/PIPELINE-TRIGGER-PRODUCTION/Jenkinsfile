@@ -1,0 +1,11 @@
+pipeline {
+    agent any
+    stages {
+        stage('Trigger: Production') {
+            steps {
+                echo '// You have triggered the production downstream job'
+                
+            }
+        }
+    }
+}

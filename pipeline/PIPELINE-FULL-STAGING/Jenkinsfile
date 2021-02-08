@@ -22,18 +22,18 @@ pipeline {
                 '''
             }
         }
-        stage('Testing'){
+        stage('Static & Unit Tsts'){
             steps{
                 echo '// Testing // Static analysis of code'
                 sh '''
                     source env/bin/activate
                     
                     rm ./radon/*
-                    radon cc src/ --min ${RADON_MIN} --total-average -s --json --output-file ./radon/analysis.json
+                    radon cc src/ --min B --total-average -s --json --output-file ./radon/analysis.json
                     grep -il 'rank' ./radon/* && 'Radon test: failed'
 
                     rm ./flake8/*
-                    flake8 src/ --exit-zero --ignore ${FLAKE8_IGNORE} --statistics --show-source --format=pylint --output-file ./flake8/analysis.json
+                    flake8 src/ --exit-zero --ignore W --statistics --show-source --format=pylint --output-file ./flake8/analysis.json
                     grep -il -E '[[:alnum:]]' ./flake8/* && 'Flake8 test: failed'
                     
                     rm ./bandit/*
@@ -59,7 +59,7 @@ pipeline {
                 sh 'sam deploy --config-env staging'
             }
         }
-        stage('Integration'){
+        stage('Integration Tests'){
             steps{
                 sh '''
                     id_response=$(curl -X POST https://or92aavjea.execute-api.us-east-1.amazonaws.com/Prod/create --data '{"text":"This is a test"}' | python3 -c "import sys, json; print(json.load(sys.stdin)['id'])")
@@ -86,6 +86,26 @@ pipeline {
                 '''
             }
         }
+        stage('Merge'){
+            steps{
+                sh '''
+                    # git checkout main
+                    # git merge dev
 
-    }       
+                '''
+            }
+        }
+
+    }    
+    post {
+        // Clean after build
+        always {
+            cleanWs(cleanWhenNotBuilt: false,
+                    deleteDirs: true,
+                    disableDeferredWipeout: true,
+                    notFailBuild: true,
+                    patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+                               [pattern: '.propsfile', type: 'EXCLUDE']])
+        }
+    }   
 }
