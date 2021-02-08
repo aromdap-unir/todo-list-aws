@@ -1,1 +1,22 @@
-//A rellenar por el alumno
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                deleteDir()
+                echo '// Checkout // Get some code from a CodeCommit repository'
+                git branch: 'dev', credentialsId: '676655fc-c40f-4964-b3ba-c3dfb91b2094', url: 'https://git-codecommit.us-east-1.amazonaws.com/v1/repos/todo-list-aws'
+            }
+        }
+        stage('Remote trigger: Staging') {
+            steps {
+                build job: '../PIPELINE-TRIGGER-STAGING/Jenkinsfile', , propagate: true, wait: true
+            }
+        }
+        stage('Remote trigger: Production') {
+            steps {
+                build job: '../PIPELINE-TRIGGER-PRODUCTION/Jenkinsfile', , propagate: true, wait: true
+            }
+        }
+    }
+}
