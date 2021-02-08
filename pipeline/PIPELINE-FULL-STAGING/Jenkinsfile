@@ -89,7 +89,7 @@ pipeline {
         stage('Merge'){
             steps{
                 sh '''
-                    # git checkout main
+                    git checkout main
                     # git merge dev
 
                 '''

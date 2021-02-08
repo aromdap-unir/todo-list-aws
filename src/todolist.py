@@ -11,7 +11,7 @@ class App():
     def __init__(self):
         """
         [summary]
-        Constructor: Assignmnet of DYNAMODB resource dynamically
+        Class constructor: Assignmnet of DYNAMODB resource dynamically
         based on local/cloud execution
         """
         if os.getenv('STAGE') == 'local':
