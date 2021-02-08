@@ -10,12 +10,12 @@ pipeline {
         }
         stage('Remote trigger: Staging') {
             steps {
-                build job: '../PIPELINE-TRIGGER-STAGING/Jenkinsfile', , propagate: true, wait: true
+                build job: '../PIPELINE-TRIGGER-STAGING/Jenkinsfile', propagate: true, wait: true
             }
         }
         stage('Remote trigger: Production') {
             steps {
-                build job: '../PIPELINE-TRIGGER-PRODUCTION/Jenkinsfile', , propagate: true, wait: true
+                build job: '../PIPELINE-TRIGGER-PRODUCTION/Jenkinsfile', propagate: true, wait: true
             }
         }
     }
