@@ -8,17 +8,6 @@ pipeline {
                 git branch: 'main', credentialsId: '676655fc-c40f-4964-b3ba-c3dfb91b2094', url: 'https://git-codecommit.us-east-1.amazonaws.com/v1/repos/todo-list-aws'
             }
         }
-        stage('SetUp'){
-            steps{
-                echo '// SetUp // Creating Python Virtual Environment'
-                sh '''
-                    python3 -m venv env
-                    source env/bin/activate 
-                    pip install -r requirements.txt -q
-
-                '''
-            }
-        }
         stage('Build'){
             steps{
                 sh 'sam build -u'
