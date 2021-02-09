@@ -91,7 +91,7 @@ pipeline {
                 sh '''
                     git add .
                     git commit -m 'Jenkins pipeline: staging passed!'
-                    git push -u todo-list-aws
+                    git push -u origin
                     git checkout main
                     git merge dev
 

@@ -12,7 +12,7 @@ class App():
         """
         [summary]
         Class constructor: Assignmnet of DYNAMODB resource dynamically
-        based on local/cloud execution on class instance call
+        based on local/cloud execution on class instance caller
         """
         if os.getenv('STAGE') == 'local':
             self.dynamodb = boto3.resource('dynamodb',
