@@ -1,10 +1,10 @@
-Run started:2021-02-04 22:37:37.510888
+Run started:2021-02-09 18:10:16.823219
 
 Test results:
 	No issues identified.
 
 Code scanned:
-	Total lines of code: 195
+	Total lines of code: 222
 	Total lines skipped (#nosec): 0
 
 Run metrics:
@@ -18,4 +18,5 @@ Run metrics:
 		Low: 0.0
 		Medium: 0.0
 		High: 0.0
-Files skipped (0):
+Files skipped (1):
+	src/requirements.txt (syntax error while parsing AST from file)
