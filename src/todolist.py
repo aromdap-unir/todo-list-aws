@@ -24,7 +24,7 @@ class App():
 
     def create(self, event, context):
         """[summary]
-        Endpoint that creates entry in DB table based on text passed in body
+        Creates entry in DB table based on text passed in body
         Args:
             event ([json]): [AWS API Gateway event form]
             context ([None]): [None]
