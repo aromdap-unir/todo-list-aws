@@ -87,7 +87,7 @@ class App():
         
     def get(self, event, context):
         """[summary]
-        Endpoint that gets and existing entry in DB table
+        Gets and existing entry in DB table
         based on the id passed in path parameter
 
         Args:
