@@ -26,7 +26,7 @@ class App():
         """[summary]
         Endpoint that creates entry in DB table based on text passed in body
         Args:
-            event ([json]): [AWS API Gateway event form - With --data'{"text":"Custom"}]
+            event ([json]): [AWS API Gateway event form]
             context ([None]): [None]
 
         Raises:
