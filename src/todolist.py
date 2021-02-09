@@ -114,7 +114,7 @@ class App():
     
     def show(self, event, context):
         """[summary]
-        Endpoint that lists all existing entries in DB table
+        Lists all existing entries in DB table
 
         Args:
             event ([json]): [AWS API Gateway event form]
