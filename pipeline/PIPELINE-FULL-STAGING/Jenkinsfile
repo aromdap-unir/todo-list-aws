@@ -22,7 +22,7 @@ pipeline {
                 '''
             }
         }
-        stage('Static & Unit Tsts'){
+        stage('Static & Unit Tests'){
             steps{
                 echo '// Testing // Static analysis of code'
                 sh '''
@@ -81,7 +81,7 @@ pipeline {
                     curl https://or92aavjea.execute-api.us-east-1.amazonaws.com/Prod/delete/$id_path
                     code=''
                     code=$(curl -o /dev/null -w "%{http_code}" https://or92aavjea.execute-api.us-east-1.amazonaws.com/Prod/get/$id_path)
-                    [ "$code" != 502 ] && 'Delete method: Failed!'
+                    [ "$code" == 502 ] || 'Delete method: Failed!'
 
                 '''
             }
