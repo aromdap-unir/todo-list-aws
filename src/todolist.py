@@ -60,7 +60,7 @@ class App():
   
     def delete(self, event, context):
         """[summary]
-        Endpoint that deletes and existing entry in DB table
+        Deletes and existing entry in DB table
         based on the id passed in path parameter
 
         Args:
