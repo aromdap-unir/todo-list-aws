@@ -134,4 +134,42 @@ if os.getenv('STAGE') == 'local':
             self.dynamodb = boto3.resource('dynamodb')
 ```
 
+### Test your endpoints
+
+There you go, this is for free:
+```
+curl -X POST http://127.0.0.1:3000/create --data '{ "text": "Learn Serverless" }'
+```
+Response:
+{"id": "aefcdd41-64b1-11eb-af9f-a9da7a8c1ae2", "text": "Learn Serverless", "checked": false, "createdAt": "1612199987.2451952", "updatedAt": "1612199987.2451952"}
+
+```
+curl https://127.0.0.1:3000/show 
+```
+[{"checked": false, "createdAt": "1612199987.2451952", "id": "aefcdd41-64b1-11eb-af9f-a9da7a8c1ae2", "text": "Learn Serverless", "updatedAt": "1612199987.2451952"}]
+
+```
+curl https://127.0.0.1:3000/get/<id>
+```
+{"checked": false, "createdAt": "1612199987.2451952", "id": "aefcdd41-64b1-11eb-af9f-a9da7a8c1ae2", "text": "Learn Serverless", "updatedAt": "1612199987.2451952"}
+```
+curl -X PUT https://127.0.0.1:3000/update/<id> --data '{ "text": "Learn Serverless", "checked": true }'
+```
+{"createdAt": "1612199987.2451952", "checked": true, "id": "aefcdd41-64b1-11eb-af9f-a9da7a8c1ae2", "text": "Learn Serverless", "updatedAt": 1612200254004}
+```
+curl -X DELETE https://127.0.0.1:3000/delete/<id>
+```
+"Deleted ID: aefcdd41-64b1-11eb-af9f-a9da7a8c1ae2"
+
+## SAM Deploy: now for real
+
+Once you are sure your endpoints behave as expected, deploy manually your application using the guided option:
+```
+sam deploy --guided
+```
+
+The outcome of that command will generate a file similar to the **samconfig.toml** but only with a [default] profile. This file is really important: you will later define your staging and production indications for the deployments via Jenkins.
+
+
+
 
