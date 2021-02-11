@@ -177,7 +177,7 @@ The outcome of that command will generate a file similar to the **samconfig.toml
 ## Jenkins: serious business now
 
 It is time to automate your deployment, and it will be done by composing three pipelines that will do the work for you:
-- Pipeline - Staging: it will deploy your code held in the dev branch
+- **Pipeline - Staging: it will deploy your code held in the dev branch**
 * Stage - Checkout
 * Stage - Setup
 * Stage - Code analysis
@@ -187,30 +187,30 @@ It is time to automate your deployment, and it will be done by composing three p
 * Stage - Functional test
 * Stage - Merge to master
 * Stage - Clean after yourself
-- Pipeline - Production: it will deploy your code held in the main branch
+- **Pipeline - Production: it will deploy your code held in the main branch**
 * Stage - Checkout
 * Stage - Setup
 * Stage - Build
 * Stage - Deploy
 * Stage - Functional test
 * Stage - Clean after yourself
-- Pipeline - Full CICD: it will trigger sequently the two pipelines
+- **Pipeline - Full CICD: it will trigger sequently the two pipelines**
 * Stage - Staging
 * Stage - Production
 
 ### Testing: minimums
 
 For the testing, some minimums are requested:
-- Code static analysis:
+- **Code static analysis:**
 * Radon: No ranks above B in the analysis code will be allowed
 * Flake8: No errors in PEP8 standars will be allowed
 * Bandit: No errors will be allowed
 
-- Unit test:
+- **Unit test:**
 * Pytest or Unittest modules will pass unit test on class methods
 * Coverage will have to be up to 80%
 
-- Functional testing:
+- **Functional testing:**
 * All endpoints have to work
 * Control the outputs of all requests to methods and fail if unexpected behaviour is detected
 
