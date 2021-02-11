@@ -140,25 +140,29 @@ There you go, this is for free:
 ```
 curl -X POST http://127.0.0.1:3000/create --data '{ "text": "Learn Serverless" }'
 ```
-Response:
+**Response:**
 {"id": "aefcdd41-64b1-11eb-af9f-a9da7a8c1ae2", "text": "Learn Serverless", "checked": false, "createdAt": "1612199987.2451952", "updatedAt": "1612199987.2451952"}
 
 ```
 curl https://127.0.0.1:3000/show 
 ```
+**Response:**
 [{"checked": false, "createdAt": "1612199987.2451952", "id": "aefcdd41-64b1-11eb-af9f-a9da7a8c1ae2", "text": "Learn Serverless", "updatedAt": "1612199987.2451952"}]
 
 ```
 curl https://127.0.0.1:3000/get/<id>
 ```
+**Response:**
 {"checked": false, "createdAt": "1612199987.2451952", "id": "aefcdd41-64b1-11eb-af9f-a9da7a8c1ae2", "text": "Learn Serverless", "updatedAt": "1612199987.2451952"}
 ```
 curl -X PUT https://127.0.0.1:3000/update/<id> --data '{ "text": "Learn Serverless", "checked": true }'
 ```
+**Response:**
 {"createdAt": "1612199987.2451952", "checked": true, "id": "aefcdd41-64b1-11eb-af9f-a9da7a8c1ae2", "text": "Learn Serverless", "updatedAt": 1612200254004}
 ```
 curl -X DELETE https://127.0.0.1:3000/delete/<id>
 ```
+**Response:**
 "Deleted ID: aefcdd41-64b1-11eb-af9f-a9da7a8c1ae2"
 
 ## SAM Deploy: now for real
@@ -170,6 +174,45 @@ sam deploy --guided
 
 The outcome of that command will generate a file similar to the **samconfig.toml** but only with a [default] profile. This file is really important: you will later define your staging and production indications for the deployments via Jenkins.
 
+## Jenkins: serious business now
+
+It is time to automate your deployment, and it will be done by composing three pipelines that will do the work for you:
+- Pipeline - Staging: it will deploy your code held in the dev branch
+* Stage - Checkout
+* Stage - Setup
+* Stage - Code analysis
+* Stage - Unit test
+* Stage - Build
+* Stage - Deploy
+* Stage - Functional test
+* Stage - Merge to master
+* Stage - Clean after yourself
+- Pipeline - Production: it will deploy your code held in the main branch
+* Stage - Checkout
+* Stage - Setup
+* Stage - Build
+* Stage - Deploy
+* Stage - Functional test
+* Stage - Clean after yourself
+- Pipeline - Full CICD: it will trigger sequently the two pipelines
+* Stage - Staging
+* Stage - Production
+
+### Testing: minimums
+
+For the testing, some minimums are requested:
+- Code static analysis:
+* Radon: No ranks above B in the analysis code will be allowed
+* Flake8: No errors in PEP8 standars will be allowed
+* Bandit: No errors will be allowed
+
+- Unit test:
+* Pytest or Unittest modules will pass unit test on class methods
+* Coverage will have to be up to 80%
+
+- Functional testing:
+* All endpoints have to work
+* Control the outputs of all requests to methods and fail if unexpected behaviour is detected
 
 
 
